@@ -4,6 +4,7 @@ import ImageService from '@/services/ImageService';
 import getFileTypeFromFilename from '@/utils/getFileTypeFromFilename';
 
 import { ICreateProductRequestDTO } from './CreateProductDTO';
+import { FormattedExpressError } from '@/utils/HandleExpressError';
 
 export default class CreateProductUseCase {
   constructor(
@@ -39,7 +40,11 @@ export default class CreateProductUseCase {
 
       imageService.deleteFromUploadsRaw(data.file.filename);
 
-      throw error;
+      throw new FormattedExpressError({
+        error,
+        description: 'Não foi possível cadastrar o produto',
+        status: 500
+      });
 
     }
 
