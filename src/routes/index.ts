@@ -2,11 +2,10 @@ import { Router } from 'express';
 
 import { multerUpload } from '@/config/multer.config';
 
+import CreateProductController from './Product/Create';
+
 const routes = Router();
 
-routes.post('/image', multerUpload.single('image'), (req, res) => {
-  console.log(req.file)
-  res.send('Hello')
-});
+routes.post('/product/create', multerUpload.single('image'), CreateProductController.handler);
 
 export default routes;
