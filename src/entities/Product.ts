@@ -17,8 +17,8 @@ export default class Product {
     optionals?: { id: Product['id']; created_at: Product['created_at']; }
   ) {
     this.id = optionals?.id ?? randomUUID();
-    this.name = props.name;
-    this.description = props.description;
+    this.name = props.name.trim();
+    this.description = props.description.trim();
     this.image_name = props.image_name;
     this.value = props.value;
     this.quantity = props.quantity;
