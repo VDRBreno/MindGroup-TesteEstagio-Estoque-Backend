@@ -13,7 +13,7 @@ model Product {
   name        String
   description String
   image_name  String
-  value       Int
+  value       Float
   quantity    Int
 
   created_at DateTime @default(now())
