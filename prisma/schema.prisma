@@ -28,7 +28,7 @@ model User {
   email    String
   password String
 
-  create_at DateTime @default(now())
+  created_at DateTime @default(now())
 
   @@map("users")
 }
