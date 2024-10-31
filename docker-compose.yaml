@@ -1,9 +1,10 @@
 services:
   mind-estoque-database:
-    image: postgres:16.4
+    image: mysql:9
     ports:
-      - 5432:5432
+      - 3306:3306
     environment:
-      - POSTGRES_USER=user
-      - POSTGRES_PASSWORD=password
-      - POSTGRES_DB=estoque
+      - MYSQL_ROOT_PASSWORD=root
+      - MYSQL_DATABASE=estoque
+      - MYSQL_USER=user
+      - MYSQL_PASSWORD=password
