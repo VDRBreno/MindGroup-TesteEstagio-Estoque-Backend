@@ -11,7 +11,7 @@ export default class ValidUserSessionRequestDTO extends RequestDTO<IValidUserSes
 
   validate(data: unknown) {
     const schema = Joi.object({
-      user_id: Joi.string().email().required(),
+      user_id: Joi.string().required(),
       session_id: Joi.string().required()
     });
 
