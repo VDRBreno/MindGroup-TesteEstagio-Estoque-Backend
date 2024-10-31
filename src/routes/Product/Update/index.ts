@@ -28,9 +28,9 @@ const UpdateProductController: Route = {
 
       const prismaProductRepository = new PrismaProductRepository();
       const updateProductUseCase = new UpdateProductUseCase(prismaProductRepository);
-      await updateProductUseCase.execute(dto.value);
+      const { product } = await updateProductUseCase.execute(dto.value);
 
-      res.status(200).send({ success: true });
+      res.status(200).send({ product });
 
     } catch(error) {
 
