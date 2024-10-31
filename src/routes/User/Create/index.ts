@@ -1,6 +1,7 @@
 import { Route } from '@/types/Route';
 import HandleExpressError, { FormattedExpressError } from '@/utils/HandleExpressError';
 import PrismaUserRepository from '@/repositories/implements/PrismaUserRepository';
+import PrismaUserSessionRepository from '@/repositories/implements/PrismaUserSessionRepository';
 
 import CreateUserRequestDTO from './CreateUserDTO';
 import CreateUserUseCase from './CreateUserUseCase';
@@ -17,11 +18,12 @@ const CreateUserController: Route = {
           status: 400
         });
 
-      const prismaUseRepository = new PrismaUserRepository();
-      const createUserUseCase = new CreateUserUseCase(prismaUseRepository);
-      await createUserUseCase.execute(req.body);
+      const prismaUserRepository = new PrismaUserRepository();
+      const prismaUserSessionRepository = new PrismaUserSessionRepository();
+      const createUserUseCase = new CreateUserUseCase(prismaUserRepository, prismaUserSessionRepository);
+      const { userId, sessionId } = await createUserUseCase.execute(dto.value);
 
-      res.status(201).send();
+      res.status(201).send({ userId, sessionId });
 
     } catch(error) {
       HandleExpressError({
