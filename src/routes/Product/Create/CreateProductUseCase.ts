@@ -32,6 +32,10 @@ export default class CreateProductUseCase {
 
       imageService.moveFromRawDirectoryToUploads(data.file.filename, newImageFilename);
 
+      return {
+        product
+      };
+
     } catch(error) {
 
       const productExists = await this.productRepository.findById({ id: product.id });

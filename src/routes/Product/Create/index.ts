@@ -26,9 +26,9 @@ const CreateProductController: Route = {
 
       const prismaProductRepository = new PrismaProductRepository();
       const createProductUseCase = new CreateProductUseCase(prismaProductRepository);
-      await createProductUseCase.execute(data);
+      const { product } = await createProductUseCase.execute(dto.value);
 
-      res.status(201).send();
+      res.status(201).send({ product });
 
     } catch(error) {
       HandleExpressError({
