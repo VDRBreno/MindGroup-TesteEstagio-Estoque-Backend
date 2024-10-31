@@ -12,7 +12,7 @@ export default class User {
 
   constructor(
     props: Omit<User, 'id' | 'created_at'>,
-    optionals?: { id: User['id']; created_at: User['created_at']; }
+    optionals?: { id?: User['id']; created_at?: User['created_at']; }
   ) {
     this.id = optionals?.id ?? randomUUID();
     this.name = props.name.trim();

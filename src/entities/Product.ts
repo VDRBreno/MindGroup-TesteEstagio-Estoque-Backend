@@ -14,7 +14,7 @@ export default class Product {
 
   constructor(
     props: Omit<Product, 'id' | 'created_at'>,
-    optionals?: { id: Product['id']; created_at: Product['created_at']; }
+    optionals?: { id?: Product['id']; created_at?: Product['created_at']; }
   ) {
     this.id = optionals?.id ?? randomUUID();
     this.name = props.name.trim();

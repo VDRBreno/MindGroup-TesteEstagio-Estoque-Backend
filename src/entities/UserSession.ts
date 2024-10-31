@@ -13,7 +13,7 @@ export default class UserSession {
 
   constructor(
     props: Omit<UserSession, 'id' | 'expires_at' | 'created_at'>,
-    optionals?: { id: UserSession['id']; created_at: UserSession['created_at']; expires_at: UserSession['expires_at']; }
+    optionals?: { id?: UserSession['id']; created_at?: UserSession['created_at']; expires_at: UserSession['expires_at']; }
   ) {
     this.id = optionals?.id ?? randomUUID();
     this.user_id = props.user_id;
