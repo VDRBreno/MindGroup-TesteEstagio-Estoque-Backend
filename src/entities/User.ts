@@ -22,3 +22,13 @@ export default class User {
   }
 
 }
+
+type UserSensitiveFields = 'email' | 'password';
+
+export type UserSecure = Omit<User, UserSensitiveFields>;
+
+export const UserSecureSelect: {[P in keyof Omit<User, UserSensitiveFields>]: boolean} = {
+  id: true,
+  name: true,
+  created_at: true
+}
