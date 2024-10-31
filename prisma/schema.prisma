@@ -32,3 +32,14 @@ model User {
 
   @@map("users")
 }
+
+model UserSession {
+  id String @id @default(uuid())
+
+  user_id    String   @unique
+  expires_at DateTime
+
+  created_at DateTime @default(now())
+
+  @@map("users_session")
+}
