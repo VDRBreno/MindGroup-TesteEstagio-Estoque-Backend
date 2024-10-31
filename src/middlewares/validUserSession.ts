@@ -1,7 +1,7 @@
 import { NextFunction, Request, Response } from 'express';
+import Joi from 'joi';
 
 import RequestDTO from '@/entities/RequestDTO';
-import Joi from 'joi';
 import HandleExpressError, { FormattedExpressError } from '@/utils/HandleExpressError';
 import PrismaUserRepository from '@/repositories/implements/PrismaUserRepository';
 import PrismaUserSessionRepository from '@/repositories/implements/PrismaUserSessionRepository';
@@ -41,6 +41,7 @@ export default async function validUserSessionMiddleware(req: Request, res: Resp
     if(!dto.validate(data) || !dto.value)
       throw new FormattedExpressError({
         error: 'Unable to validUserSession, data is invalid',
+        error_code: 'INVALID_DATA',
         description: `${dto.error}`,
         status: 400
       });
@@ -51,6 +52,7 @@ export default async function validUserSessionMiddleware(req: Request, res: Resp
     if(!user)
       throw new FormattedExpressError({
         error: 'Unable to validUserSession',
+        error_code: 'USER_NOT_FOUND',
         description: 'Usuário não encontrado',
         status: 404
       });
@@ -61,6 +63,7 @@ export default async function validUserSessionMiddleware(req: Request, res: Resp
     if(!userSession)
       throw new FormattedExpressError({
         error: 'Unable to validUserSession',
+        error_code: 'SESSION_NOT_FOUND',
         description: 'Sessão não encontrada',
         status: 404
       });
@@ -69,6 +72,7 @@ export default async function validUserSessionMiddleware(req: Request, res: Resp
       await prismaUserSessionRepository.delete({ id: userSession.id });
       throw new FormattedExpressError({
         error: 'Unable to validUserSession',
+        error_code: 'SESSION_EXPIRED',
         description: 'Sessão expirada',
         status: 401
       });

@@ -14,6 +14,7 @@ const AuthUserController: Route = {
       if(!dto.validate(req.body) || !dto.value)
         throw new FormattedExpressError({
           error: 'Unable to AuthUserController, data is invalid',
+          error_code: 'INVALID_DATA',
           description: `${dto.error}`,
           status: 400
         });

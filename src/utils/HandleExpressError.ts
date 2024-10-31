@@ -4,11 +4,13 @@ import colorout from './colorout';
 export class FormattedExpressError {
 
   public error: any;
+  public error_code: string;
   public description: string;
   public status: number;
 
   constructor(props: FormattedExpressError) {
     this.error = props.error;
+    this.error_code = props.error_code;
     this.description = props.description;
     this.status = props.status;
   }
@@ -39,7 +41,7 @@ export default function HandleExpressError({
     console.error(colorout('fg.red', 'ERROR'));
     console.error(error.error.stack ?? error.error);
 
-    response.status(error.status).send({ error_description: error.description });
+    response.status(error.status).send({ error_description: error.description, error_code: error.error_code });
     
   } else if (error instanceof Error) {
 
@@ -53,14 +55,14 @@ export default function HandleExpressError({
     console.error(colorout('fg.red', 'ERROR'));
     console.error(error.stack ?? error);
 
-    response.status(500).send({ error_description: 'Ocorreu um erro inesperado' });
+    response.status(500).send({ error_description: 'Ocorreu um erro inesperado', error_code: 'INTERNAL_SERVER_ERROR' });
 
   } else {
 
     console.error(colorout('fg.red', 'ANY ERROR'));
     console.error(error);
 
-    response.status(500).send({ error_description: 'Ocorreu um erro inesperado' });
+    response.status(500).send({ error_description: 'Ocorreu um erro inesperado', error_code: 'INTERNAL_SERVER_ERROR' });
     
   }
   

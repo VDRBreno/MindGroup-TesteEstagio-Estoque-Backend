@@ -3,28 +3,28 @@ import HandleExpressError, { FormattedExpressError } from '@/utils/HandleExpress
 import PrismaUserRepository from '@/repositories/implements/PrismaUserRepository';
 import PrismaUserSessionRepository from '@/repositories/implements/PrismaUserSessionRepository';
 
-import CreateUserRequestDTO from './CreateUserDTO';
-import CreateUserUseCase from './CreateUserUseCase';
+import ValidUserSessionRequestDTO from './ValidUserSessionDTO';
+import ValidUserSessionUseCase from './ValidUserSessionUseCase';
 
-const CreateUserController: Route = {
+const ValidUserSessionController: Route = {
   handler: async (req, res) => {
     try {
 
-      const dto = new CreateUserRequestDTO();
+      const dto = new ValidUserSessionRequestDTO();
       if(!dto.validate(req.body) || !dto.value)
         throw new FormattedExpressError({
-          error: 'Unable to CreateUserController, data is invalid',
+          error: 'Unable to ValidUserSessionController, data is invalid',
           error_code: 'INVALID_DATA',
           description: `${dto.error}`,
           status: 400
         });
 
-      const prismaUserRepository = new PrismaUserRepository();
+      const prismaUseRepository = new PrismaUserRepository();
       const prismaUserSessionRepository = new PrismaUserSessionRepository();
-      const createUserUseCase = new CreateUserUseCase(prismaUserRepository, prismaUserSessionRepository);
-      const { userId, sessionId } = await createUserUseCase.execute(dto.value);
+      const validUserSessionUseCase = new ValidUserSessionUseCase(prismaUseRepository, prismaUserSessionRepository);
+      await validUserSessionUseCase.execute(dto.value);
 
-      res.status(201).send({ userId, sessionId });
+      res.status(200).send({ success: true });
 
     } catch(error) {
       HandleExpressError({
@@ -35,4 +35,4 @@ const CreateUserController: Route = {
   }
 }
 
-export default CreateUserController;
+export default ValidUserSessionController;

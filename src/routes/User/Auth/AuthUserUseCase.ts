@@ -19,6 +19,7 @@ export default class AuthUserUseCase {
     if(!user)
       throw new FormattedExpressError({
         error: 'Unable to AuthUserUseCase',
+        error_code: 'USER_NOT_FOUND',
         description: 'Usuário não encontrado',
         status: 404
       });
@@ -27,6 +28,7 @@ export default class AuthUserUseCase {
     if(!isValidPassword)
       throw new FormattedExpressError({
         error: 'Unable to AuthUserUseCase',
+        error_code: 'INVALID_PASSWORD',
         description: 'Senha inválida',
         status: 406
       });

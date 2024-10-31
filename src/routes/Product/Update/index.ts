@@ -3,10 +3,10 @@ import HandleExpressError, { FormattedExpressError } from '@/utils/HandleExpress
 import PrismaProductRepository from '@/repositories/implements/PrismaProductRepository';
 import ImageService from '@/services/ImageService';
 
-import CreateProductRequestDTO from './CreateProductDTO';
-import CreateProductUseCase from './CreateProductUseCase';
+import UpdateProductRequestDTO from './UpdateProductDTO'
+import UpdateProductUseCase from './UpdateProductUseCase';
 
-const CreateProductController: Route = {
+const UpdateProductController: Route = {
   handler: async (req, res) => {
     try {
 
@@ -17,20 +17,20 @@ const CreateProductController: Route = {
         }
       }
 
-      const dto = new CreateProductRequestDTO();
+      const dto = new UpdateProductRequestDTO();
       if(!dto.validate(data) || !dto.value)
         throw new FormattedExpressError({
-          error: 'Unable to CreateProductController, data is invalid',
+          error: 'Unable to UpdateProductController, data is invalid',
           error_code: 'INVALID_DATA',
           description: `${dto.error}`,
           status: 400
         });
 
       const prismaProductRepository = new PrismaProductRepository();
-      const createProductUseCase = new CreateProductUseCase(prismaProductRepository);
-      const { product } = await createProductUseCase.execute(dto.value);
+      const updateProductUseCase = new UpdateProductUseCase(prismaProductRepository);
+      await updateProductUseCase.execute(dto.value);
 
-      res.status(201).send({ product });
+      res.status(200).send({ success: true });
 
     } catch(error) {
 
@@ -47,4 +47,4 @@ const CreateProductController: Route = {
   }
 }
 
-export default CreateProductController;
+export default UpdateProductController;

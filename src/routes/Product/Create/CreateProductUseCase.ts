@@ -2,9 +2,9 @@ import Product from '@/entities/Product';
 import { IProductRepository } from '@/repositories/ProductRepository';
 import ImageService from '@/services/ImageService';
 import getFileTypeFromFilename from '@/utils/getFileTypeFromFilename';
+import { FormattedExpressError } from '@/utils/HandleExpressError';
 
 import { ICreateProductRequestDTO } from './CreateProductDTO';
-import { FormattedExpressError } from '@/utils/HandleExpressError';
 
 export default class CreateProductUseCase {
   constructor(
@@ -38,14 +38,11 @@ export default class CreateProductUseCase {
 
     } catch(error) {
 
-      const productExists = await this.productRepository.findById({ id: product.id });
-      if(productExists)
-        imageService.deleteFromUploads(product.image_name);
-
       imageService.deleteFromUploadsRaw(data.file.filename);
 
       throw new FormattedExpressError({
         error,
+        error_code: 'FAIL_TO_CREATE_PRODUCT',
         description: 'Não foi possível cadastrar o produto',
         status: 500
       });

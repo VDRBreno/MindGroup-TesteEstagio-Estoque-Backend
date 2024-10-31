@@ -20,6 +20,7 @@ export default class CreateUserUseCase {
     if(emailAlreadyRegistered)
       throw new FormattedExpressError({
         error: 'Unable to CreateUserUseCase',
+        error_code: 'EMAIL_ALREADY_REGISTERED',
         description: 'Já existe um usuário registrado com esse e-mail',
         status: 409
       });
@@ -48,6 +49,7 @@ export default class CreateUserUseCase {
     } catch(error) {
       throw new FormattedExpressError({
         error,
+        error_code: 'FAIL_TO_CREATE_USER',
         description: 'Não foi possível cadastrar o usuário',
         status: 500
       });
