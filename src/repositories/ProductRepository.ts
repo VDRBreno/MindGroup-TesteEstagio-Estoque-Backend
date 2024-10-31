@@ -19,9 +19,17 @@ export interface IUpdateProduct {
   product: Product;
 }
 
+export interface IDeleteProduct {
+  id: string;
+}
+export interface IDeleteProductResponse {
+  product: Product;
+}
+
 export interface IProductRepository {
   list: () => Promise<IListProductResponse>;
   findById: (data: IFindProductById) => Promise<IFindProductByIdResponse>;
   create: (data: ICreateProduct) => Promise<void>;
   update: (data: IUpdateProduct) => Promise<void>;
+  delete: (data: IDeleteProduct) => Promise<IDeleteProductResponse>;
 }

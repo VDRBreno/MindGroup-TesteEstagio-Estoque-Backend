@@ -10,6 +10,7 @@ import ValidUserSessionController from './User/ValidSession';
 import ListProductController from './Product/List';
 import CreateProductController from './Product/Create';
 import UpdateProductController from './Product/Update';
+import DeleteProductController from './Product/Delete';
 
 const routes = Router();
 
@@ -20,5 +21,6 @@ routes.post('/user/session/valid', ValidUserSessionController.handler);
 routes.get('/product/list', validUserSessionMiddleware, ListProductController.handler);
 routes.post('/product/create', multerUpload.single('image'), validUserSessionMiddleware, CreateProductController.handler);
 routes.patch('/product/update', multerUpload.single('image'), validUserSessionMiddleware, UpdateProductController.handler);
+routes.delete('/product/delete', validUserSessionMiddleware, DeleteProductController.handler);
 
 export default routes;

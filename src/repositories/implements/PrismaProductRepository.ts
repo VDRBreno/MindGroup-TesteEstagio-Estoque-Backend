@@ -1,6 +1,6 @@
 import prisma from '@/prisma';
 
-import { ICreateProduct, IFindProductById, IFindProductByIdResponse, IListProductResponse, IProductRepository, IUpdateProduct } from '../ProductRepository';
+import { ICreateProduct, IDeleteProduct, IDeleteProductResponse, IFindProductById, IFindProductByIdResponse, IListProductResponse, IProductRepository, IUpdateProduct } from '../ProductRepository';
 
 export default class PrismaProductRepository implements IProductRepository {
 
@@ -44,6 +44,20 @@ export default class PrismaProductRepository implements IProductRepository {
       },
       data: data.product
     });
+
+  }
+
+  async delete(data: IDeleteProduct): Promise<IDeleteProductResponse> {
+
+    const product = await prisma.product.delete({
+      where: {
+        id: data.id
+      }
+    });
+
+    return {
+      product
+    };
 
   }
 
