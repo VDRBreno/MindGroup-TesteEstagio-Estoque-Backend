@@ -6,6 +6,7 @@ import HandleExpressError, { FormattedExpressError } from '@/utils/HandleExpress
 import PrismaUserRepository from '@/repositories/implements/PrismaUserRepository';
 import PrismaUserSessionRepository from '@/repositories/implements/PrismaUserSessionRepository';
 import ImageService from '@/services/ImageService';
+import ValidUserSessionUseCase from '@/routes/User/ValidSession/ValidUserSessionUseCase';
 
 interface IValidUserSessionRequestDTO {
   user_id: string;
@@ -47,36 +48,9 @@ export default async function validUserSessionMiddleware(req: Request, res: Resp
       });
   
     const prismaUserRepository = new PrismaUserRepository();
-    
-    const { user } = await prismaUserRepository.findById({ id: dto.value.user_id });
-    if(!user)
-      throw new FormattedExpressError({
-        error: 'Unable to validUserSession',
-        error_code: 'USER_NOT_FOUND',
-        description: 'Usuário não encontrado',
-        status: 404
-      });
-  
     const prismaUserSessionRepository = new PrismaUserSessionRepository();
-  
-    const { userSession } = await prismaUserSessionRepository.findById({ id: dto.value.session_id });
-    if(!userSession)
-      throw new FormattedExpressError({
-        error: 'Unable to validUserSession',
-        error_code: 'SESSION_NOT_FOUND',
-        description: 'Sessão não encontrada',
-        status: 404
-      });
-
-    if(new Date() > userSession.expires_at) {
-      await prismaUserSessionRepository.delete({ id: userSession.id });
-      throw new FormattedExpressError({
-        error: 'Unable to validUserSession',
-        error_code: 'SESSION_EXPIRED',
-        description: 'Sessão expirada',
-        status: 401
-      });
-    }
+    const validUserSessionUseCase = new ValidUserSessionUseCase(prismaUserRepository, prismaUserSessionRepository);
+    await validUserSessionUseCase.execute(dto.value);
   
     delete req.body.user_id;
     delete req.body.session_id;

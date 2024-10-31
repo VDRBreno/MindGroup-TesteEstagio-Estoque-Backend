@@ -1,9 +1,6 @@
-import bcrypt from 'bcrypt';
-
 import { IUserRepository } from '@/repositories/UserRepository';
 import { IUserSessionRepository } from '@/repositories/UserSessionRepository';
 import { FormattedExpressError } from '@/utils/HandleExpressError';
-import UserSession from '@/entities/UserSession';
 
 import { IValidUserSessionRequestDTO } from './ValidUserSessionDTO';
 
@@ -33,13 +30,15 @@ export default class ValidUserSessionUseCase {
         status: 404
       });
 
-    if(new Date() > userSession.expires_at)
+    if(new Date() > userSession.expires_at) {
+      await this.userSessionRepository.delete({ id: userSession.id });
       throw new FormattedExpressError({
-        error: 'Able to ValidUserSessionUseCase, session is expired',
+        error: 'Able to ValidUserSessionUseCase, but session is expired',
         error_code: 'SESSION_EXPIRED',
         description: 'Sessão expirada',
         status: 401
       });
+    }
 
   }
 }
