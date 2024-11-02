@@ -1,10 +1,12 @@
-export default function getEnvOrDefault<T>(env: string, value: T) {
-  if(process.env[env]) {
-    if(typeof value==='string')
-      return process.env[env] as T;
+import env from './env';
 
-    if(!isNaN(+process.env[env]))
-      return +process.env[env] as T;
+export default function getEnvOrDefault<T>(key: string, value: T) {
+  if(env[key]) {
+    if(typeof value==='string')
+      return env[key] as T;
+
+    if(!isNaN(+env[key]))
+      return +env[key] as T;
   }
   
   return value as T;
