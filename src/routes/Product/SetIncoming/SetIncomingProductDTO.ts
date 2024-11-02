@@ -12,7 +12,7 @@ export default class SetIncomingProductRequestDTO extends RequestDTO<ISetIncomin
   validate(data: unknown) {
     const schema = Joi.object({
       id: Joi.string().required(),
-      quantity: Joi.number().strict().required()
+      quantity: Joi.number().min(0).strict().required()
     });
 
     const result = schema.validate(data);
