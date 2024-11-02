@@ -1,5 +1,4 @@
 #!/bin/sh
-
 # The MIT License (MIT)
 #
 # Copyright (c) 2017 Eficode Oy
@@ -21,19 +20,15 @@
 # LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
-
 VERSION="2.2.3"
-
 set -- "$@" -- "$TIMEOUT" "$QUIET" "$PROTOCOL" "$HOST" "$PORT" "$result"
 TIMEOUT=15
 QUIET=0
 # The protocol to make the request with, either "tcp" or "http"
 PROTOCOL="tcp"
-
 echoerr() {
   if [ "$QUIET" -ne 1 ]; then printf "%s\n" "$*" 1>&2; fi
 }
-
 usage() {
   exitcode="$1"
   cat << USAGE >&2
@@ -46,7 +41,6 @@ Usage:
 USAGE
   exit "$exitcode"
 }
-
 wait_for() {
   case "$PROTOCOL" in
     tcp)
@@ -62,9 +56,7 @@ wait_for() {
       fi
       ;;
   esac
-
   TIMEOUT_END=$(($(date +%s) + TIMEOUT))
-
   while :; do
     case "$PROTOCOL" in
       tcp) 
@@ -78,7 +70,6 @@ wait_for() {
         exit 1
         ;;
     esac
-
     result=$?
         
     if [ $result -eq 0 ] ; then
@@ -88,23 +79,19 @@ wait_for() {
           shift
           set -- "$@" "$result"
         done
-
         TIMEOUT=$2 QUIET=$3 PROTOCOL=$4 HOST=$5 PORT=$6 result=$7
         shift 7
         exec "$@"
       fi
       exit 0
     fi
-
     if [ $TIMEOUT -ne 0 -a $(date +%s) -ge $TIMEOUT_END ]; then
       echo "Operation timed out" >&2
       exit 1
     fi
-
     sleep 1
   done
 }
-
 while :; do
   case "$1" in
     http://*|https://*)
@@ -167,12 +154,10 @@ while :; do
     ;;
   esac
 done
-
 if ! [ "$TIMEOUT" -ge 0 ] 2>/dev/null; then
   echoerr "Error: invalid timeout '$TIMEOUT'"
   usage 3
 fi
-
 case "$PROTOCOL" in
   tcp)
     if [ "$HOST" = "" ] || [ "$PORT" = "" ]; then
@@ -187,6 +172,5 @@ case "$PROTOCOL" in
     fi
   ;;
 esac
-
 echo 'Waiting for..'
 wait_for "$@"

@@ -3,7 +3,7 @@ services:
     build:
       context: .
       target: production
-    entrypoint: ./wait-for.sh database:3306 -t 40 -- npm run start
+    entrypoint: /app/wait-for.sh database:3306 -t 40 -- npm run start
     ports:
       - 3333:3333
     environment:
