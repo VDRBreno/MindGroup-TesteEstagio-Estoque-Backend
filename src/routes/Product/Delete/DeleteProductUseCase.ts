@@ -13,7 +13,7 @@ export default class DeleteProductUseCase {
     const { product } = await this.productRepository.delete({ id: data.product_id });
 
     const imageService = new ImageService();
-    imageService.deleteFromUploads(product.image_name);
+    imageService.deleteImage(product.image_name);
 
   }
 }

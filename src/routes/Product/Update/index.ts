@@ -10,15 +10,8 @@ const UpdateProductController: Route = {
   handler: async (req, res) => {
     try {
 
-      const data = {
-        ...req.body,
-        file: {
-          filename: req.file?.filename
-        }
-      }
-
       const dto = new UpdateProductRequestDTO();
-      if(!dto.validate(data) || !dto.value)
+      if(!dto.validate(req.body) || !dto.value)
         throw new FormattedExpressError({
           error: 'Unable to UpdateProductController, data is invalid',
           error_code: 'INVALID_DATA',
@@ -33,11 +26,6 @@ const UpdateProductController: Route = {
       res.status(200).send({ product });
 
     } catch(error) {
-
-      if(req.file) {
-        const imageService = new ImageService();
-        imageService.deleteFromUploadsRaw(req.file.filename);
-      }
 
       HandleExpressError({
         error,

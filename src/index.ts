@@ -11,7 +11,7 @@ import morgan from 'morgan';
 
 import ConfigureEnvironment from '@/utils/ConfigureEnvironment';
 import colorout from '@/utils/colorout';
-import { UPLOADS_DIRECTORY } from '@/utils/constants';
+import { UPLOAD_IMAGES_DIRECTORY } from '@/utils/constants';
 import { SERVER_CONFIG, SERVER_URL } from '@/config/server.config';
 import routes from '@/routes';
 
@@ -21,12 +21,13 @@ try {
 
   const server = express();
 
-  server.use(express.json());
+  server.use(express.json({ limit: '50mb' }));
+  server.use(express.urlencoded({ extended: true, limit: '50mb' }));
   server.use(cors());
   server.use(morgan('dev'));
   server.use(routes);
 
-  server.use('/images', express.static(UPLOADS_DIRECTORY));
+  server.use('/images', express.static(UPLOAD_IMAGES_DIRECTORY));
 
   server.listen(SERVER_CONFIG.port, SERVER_CONFIG.host, () => {
     console.log(colorout('fg.green', `Server Running at ${SERVER_URL}`));

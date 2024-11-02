@@ -1,10 +1,9 @@
 import Product from '@/entities/Product';
 import { IProductRepository } from '@/repositories/ProductRepository';
-
-import { IUpdateProductRequestDTO } from './UpdateProductDTO';
 import { FormattedExpressError } from '@/utils/HandleExpressError';
 import ImageService from '@/services/ImageService';
-import getFileTypeFromFilename from '@/utils/getFileTypeFromFilename';
+
+import { IUpdateProductRequestDTO } from './UpdateProductDTO';
 
 export default class UpdateProductUseCase {
   constructor(
@@ -25,25 +24,24 @@ export default class UpdateProductUseCase {
     const productUpdated = new Product({
       name: data.name,
       description: data.description,
-      image_name: '',
-      value: +data.value,
+      image_name: data.image_base64 ?'' :product.image_name,
+      value: data.value,
       quantity: 0
     }, {
       id: product.id,
       created_at: product.created_at
     });
 
+    productUpdated.image_name = `${product.id}.png`;
+    
     const imageService = new ImageService();
 
     try {
-
-      const newImageFilename = `${product.id}.${getFileTypeFromFilename(data.file.filename)}`;
-      productUpdated.image_name = newImageFilename;
-
+      
       await this.productRepository.update({ product: productUpdated });
-
-      imageService.deleteFromUploads(product.image_name);
-      imageService.moveFromRawDirectoryToUploads(data.file.filename, newImageFilename);
+      
+      if(data.image_base64)
+        imageService.saveImage(data.image_base64, productUpdated.image_name);
 
       return {
         product: productUpdated
@@ -51,7 +49,7 @@ export default class UpdateProductUseCase {
 
     } catch(error) {
 
-      imageService.deleteFromUploadsRaw(data.file.filename);
+      imageService.deleteImage(productUpdated.image_name);
 
       throw new FormattedExpressError({
         error,

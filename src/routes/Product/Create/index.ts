@@ -10,15 +10,8 @@ const CreateProductController: Route = {
   handler: async (req, res) => {
     try {
 
-      const data = {
-        ...req.body,
-        file: {
-          filename: req.file?.filename
-        }
-      }
-
       const dto = new CreateProductRequestDTO();
-      if(!dto.validate(data) || !dto.value)
+      if(!dto.validate(req.body) || !dto.value)
         throw new FormattedExpressError({
           error: 'Unable to CreateProductController, data is invalid',
           error_code: 'INVALID_DATA',
@@ -33,11 +26,6 @@ const CreateProductController: Route = {
       res.status(201).send({ product });
 
     } catch(error) {
-
-      if(req.file) {
-        const imageService = new ImageService();
-        imageService.deleteFromUploadsRaw(req.file.filename);
-      }
 
       HandleExpressError({
         error,

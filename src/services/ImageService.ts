@@ -1,27 +1,41 @@
 import path from 'node:path';
 import fs from 'node:fs';
 
-import { UPLOADS_DIRECTORY, UPLOADS_RAW_DIRECTORY } from '@/utils/constants';
+import { UPLOAD_IMAGES_DIRECTORY } from '@/utils/constants';
 
 export default class ImageService {
-  
+
   constructor() {}
 
-  moveFromRawDirectoryToUploads(currentFilename: string, newFilename: string) {
+  async saveImage(data: string, filename: string) {
+    try {
+    
+      const buffer = Buffer.from(data, 'base64');
+      
+      const imageFilePath = path.join(UPLOAD_IMAGES_DIRECTORY, filename);
+      fs.writeFileSync(imageFilePath, buffer);
 
-    const currentFilePath = path.join(UPLOADS_RAW_DIRECTORY, currentFilename);
-    const newFilePath = path.join(UPLOADS_DIRECTORY, newFilename);
-
-    fs.renameSync(currentFilePath, newFilePath);
-
+    } catch(error) {
+      throw {
+        error,
+        message: 'Unable to ImageService.saveImage'
+      };
+    }
   }
 
-  deleteFromUploads(filename: string) {
-    fs.rmSync(path.join(UPLOADS_DIRECTORY, filename));
-  }
-
-  deleteFromUploadsRaw(filename: string) {
-    fs.rmSync(path.join(UPLOADS_RAW_DIRECTORY, filename));
+  async deleteImage(filename: string) {
+    try {
+  
+      const imageFilePath = path.join(UPLOAD_IMAGES_DIRECTORY, filename);
+      if(fs.existsSync(imageFilePath))
+        fs.unlinkSync(imageFilePath);
+  
+    } catch(error) {
+      throw {
+        error,
+        message: 'Unable to ImageService.deleteImage'
+      };
+    }
   }
 
 }

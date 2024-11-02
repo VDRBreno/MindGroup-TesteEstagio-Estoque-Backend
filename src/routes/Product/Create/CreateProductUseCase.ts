@@ -1,7 +1,6 @@
 import Product from '@/entities/Product';
 import { IProductRepository } from '@/repositories/ProductRepository';
 import ImageService from '@/services/ImageService';
-import getFileTypeFromFilename from '@/utils/getFileTypeFromFilename';
 import { FormattedExpressError } from '@/utils/HandleExpressError';
 
 import { ICreateProductRequestDTO } from './CreateProductDTO';
@@ -17,20 +16,19 @@ export default class CreateProductUseCase {
       name: data.name,
       description: data.description,
       image_name: '',
-      value: +data.value,
+      value: data.value,
       quantity: 0
     });
+
+    product.image_name = `${product.id}.png`;
     
     const imageService = new ImageService();
 
     try {
-
-      const newImageFilename = `${product.id}.${getFileTypeFromFilename(data.file.filename)}`;
-      product.image_name = newImageFilename;
-
+  
       await this.productRepository.create({ product });
-
-      imageService.moveFromRawDirectoryToUploads(data.file.filename, newImageFilename);
+      
+      imageService.saveImage(data.image_base64, product.image_name);
 
       return {
         product
@@ -38,7 +36,7 @@ export default class CreateProductUseCase {
 
     } catch(error) {
 
-      imageService.deleteFromUploadsRaw(data.file.filename);
+      imageService.deleteImage(product.image_name);
 
       throw new FormattedExpressError({
         error,
