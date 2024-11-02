@@ -1,15 +1,14 @@
 import fs from 'node:fs';
 
-import { UPLOADS_DIRECTORY, UPLOADS_RAW_DIRECTORY } from './constants';
+import { KEYS_DIRECTORY, UPLOAD_IMAGES_DIRECTORY } from './constants';
 
 export default function ConfigureEnvironment() {
 
-  // CreateUploadsDirectory
-  if(!fs.existsSync(UPLOADS_DIRECTORY))
-    fs.mkdirSync(UPLOADS_DIRECTORY);
+  // CreateUploadImagesDirectory
+  if(!fs.existsSync(UPLOAD_IMAGES_DIRECTORY))
+    fs.mkdirSync(UPLOAD_IMAGES_DIRECTORY);
 
-  // CreateUploadsRawDirectory
-  if(!fs.existsSync(UPLOADS_RAW_DIRECTORY))
-    fs.mkdirSync(UPLOADS_RAW_DIRECTORY);
+  if(!fs.existsSync(KEYS_DIRECTORY))
+    throw new Error('Missing RSA keys');
 
 }
