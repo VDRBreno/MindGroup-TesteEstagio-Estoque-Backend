@@ -16,7 +16,7 @@ export default class CreateProductRequestDTO extends RequestDTO<ICreateProductRe
       image_base64: Joi.string().base64().required(),
       name: Joi.string().required(),
       description: Joi.string().required(),
-      value: Joi.number().strict().required()
+      value: Joi.number().strict().min(1).required()
     });
 
     const result = schema.validate(data);
