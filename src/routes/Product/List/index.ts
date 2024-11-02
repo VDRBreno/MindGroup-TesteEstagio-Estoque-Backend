@@ -10,7 +10,7 @@ const ListProductController: Route = {
     try {
 
       const dto = new ListProductRequestDTO();
-      if(!dto.validate(req.body) || !dto.value)
+      if(!dto.validate(req.query) || !dto.value)
         throw new FormattedExpressError({
           error: 'Unable to ListProductController, data is invalid',
           error_code: 'INVALID_DATA',

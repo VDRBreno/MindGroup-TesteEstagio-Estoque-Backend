@@ -22,9 +22,9 @@ const AuthUserController: Route = {
       const prismaUseRepository = new PrismaUserRepository();
       const prismaUserSessionRepository = new PrismaUserSessionRepository();
       const authUserUseCase = new AuthUserUseCase(prismaUseRepository, prismaUserSessionRepository);
-      const { userId, sessionId } = await authUserUseCase.execute(dto.value);
+      const { token } = await authUserUseCase.execute(dto.value);
 
-      res.status(200).send({ userId, sessionId });
+      res.status(200).send({ token });
 
     } catch(error) {
       HandleExpressError({

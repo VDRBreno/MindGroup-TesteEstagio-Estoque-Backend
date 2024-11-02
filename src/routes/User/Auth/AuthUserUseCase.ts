@@ -1,4 +1,5 @@
 import bcrypt from 'bcrypt';
+import jwt from 'jsonwebtoken';
 
 import { IUserRepository } from '@/repositories/UserRepository';
 import { IUserSessionRepository } from '@/repositories/UserSessionRepository';
@@ -6,6 +7,7 @@ import { FormattedExpressError } from '@/utils/HandleExpressError';
 import UserSession from '@/entities/UserSession';
 
 import { IAuthUserRequestDTO } from './AuthUserDTO';
+import JWT from '@/entities/JWT';
 
 export default class AuthUserUseCase {
   constructor(
@@ -41,9 +43,10 @@ export default class AuthUserUseCase {
 
     await this.userSessionRepository.create({ userSession });
 
+    const token = new JWT().sign({ user_id: user.id, session_id: userSession.id });
+
     return {
-      userId: user.id,
-      sessionId: userSession.id
+      token
     };
 
   }

@@ -28,11 +28,18 @@ export default class PrismaUserSessionRepository implements IUserSessionReposito
 
   async deleteByUserId(data: IDeleteUserSessionByUserId): Promise<void> {
 
-    await prisma.userSession.delete({
+    const userSession = await prisma.userSession.findFirst({
       where: {
         user_id: data.user_id
       }
     });
+
+    if(userSession)
+      await prisma.userSession.delete({
+        where: {
+          user_id: data.user_id
+        }
+      });
 
   }
   

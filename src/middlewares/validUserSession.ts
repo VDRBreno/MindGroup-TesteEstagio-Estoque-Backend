@@ -5,8 +5,8 @@ import RequestDTO from '@/entities/RequestDTO';
 import HandleExpressError, { FormattedExpressError } from '@/utils/HandleExpressError';
 import PrismaUserRepository from '@/repositories/implements/PrismaUserRepository';
 import PrismaUserSessionRepository from '@/repositories/implements/PrismaUserSessionRepository';
-import ImageService from '@/services/ImageService';
 import ValidUserSessionUseCase from '@/routes/User/ValidSession/ValidUserSessionUseCase';
+import JWT from '@/entities/JWT';
 
 interface IValidUserSessionRequestDTO {
   user_id: string;
@@ -33,36 +33,26 @@ class ValidUserSessionRequestDTO extends RequestDTO<IValidUserSessionRequestDTO>
 export default async function validUserSessionMiddleware(req: Request, res: Response, next: NextFunction) {
   try {
 
-    const data = {
-      user_id: req.body.user_id,
-      session_id: req.body.session_id
-    }
-  
-    const dto = new ValidUserSessionRequestDTO();
-    if(!dto.validate(data) || !dto.value)
+    if(!req.headers.authorization || req.headers.authorization.split(' ').length!==2)
       throw new FormattedExpressError({
-        error: 'Unable to validUserSession, data is invalid',
-        error_code: 'INVALID_DATA',
-        description: `${dto.error}`,
-        status: 400
+        error: 'Unable to validUserSession, token is invalid',
+        error_code: 'INVALID_TOKEN',
+        description: 'Token de autenticação inválido',
+        status: 401
       });
+      
+    const data = {
+      token: req.headers.authorization
+    }
   
     const prismaUserRepository = new PrismaUserRepository();
     const prismaUserSessionRepository = new PrismaUserSessionRepository();
     const validUserSessionUseCase = new ValidUserSessionUseCase(prismaUserRepository, prismaUserSessionRepository);
-    await validUserSessionUseCase.execute(dto.value);
-  
-    delete req.body.user_id;
-    delete req.body.session_id;
-  
+    await validUserSessionUseCase.execute(data);
+
     next();
 
   } catch(error) {
-
-    if(req.file) {
-      const imageService = new ImageService();
-      imageService.deleteFromUploadsRaw(req.file.filename);
-    }
 
     HandleExpressError({
       error,

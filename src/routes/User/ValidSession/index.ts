@@ -10,8 +10,13 @@ const ValidUserSessionController: Route = {
   handler: async (req, res) => {
     try {
 
+      const token = req.headers.authorization;
+      const data = {
+        token
+      }
+
       const dto = new ValidUserSessionRequestDTO();
-      if(!dto.validate(req.body) || !dto.value)
+      if(!dto.validate(data) || !dto.value)
         throw new FormattedExpressError({
           error: 'Unable to ValidUserSessionController, data is invalid',
           error_code: 'INVALID_DATA',
