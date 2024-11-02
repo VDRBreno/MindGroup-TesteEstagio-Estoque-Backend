@@ -1,5 +1,4 @@
 import bcrypt from 'bcrypt';
-import jwt from 'jsonwebtoken';
 
 import { IUserRepository } from '@/repositories/UserRepository';
 import { IUserSessionRepository } from '@/repositories/UserSessionRepository';

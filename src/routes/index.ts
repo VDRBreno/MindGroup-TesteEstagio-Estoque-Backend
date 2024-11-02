@@ -1,6 +1,5 @@
 import { Router } from 'express';
 
-import { multerUpload } from '@/config/multer.config';
 import validUserSessionMiddleware from '@/middlewares/validUserSession';
 
 import AuthUserController from './User/Auth';

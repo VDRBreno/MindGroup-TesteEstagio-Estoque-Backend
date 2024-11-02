@@ -1,7 +1,6 @@
 import { Route } from '@/types/Route';
 import HandleExpressError, { FormattedExpressError } from '@/utils/HandleExpressError';
 import PrismaProductRepository from '@/repositories/implements/PrismaProductRepository';
-import ImageService from '@/services/ImageService';
 
 import CreateProductRequestDTO from './CreateProductDTO';
 import CreateProductUseCase from './CreateProductUseCase';
