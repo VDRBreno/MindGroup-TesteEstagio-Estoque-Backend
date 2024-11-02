@@ -1,9 +1,11 @@
 import Product from '@/entities/Product';
+import { IOrderByType } from '@/types/OrderBy';
 import { IProductOrderBy } from '@/types/Product';
 
 export interface IListProduct {
   name: string;
   orderBy: IProductOrderBy;
+  orderByType: IOrderByType;
   page: number;
   limit: number;
 }

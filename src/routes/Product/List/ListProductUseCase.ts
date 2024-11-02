@@ -12,6 +12,7 @@ export default class ListProductUseCase {
     const { products } = await this.productRepository.list({
       name: data.name,
       orderBy: data.orderBy,
+      orderByType: data.orderByType,
       page: +data.page,
       limit: +data.limit
     });

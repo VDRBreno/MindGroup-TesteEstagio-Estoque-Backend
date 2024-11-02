@@ -13,7 +13,7 @@ export default class PrismaProductRepository implements IProductRepository {
         }
       },
       orderBy: {
-        [data.orderBy]: 'desc'
+        [data.orderBy]: data.orderByType
       },
       skip: data.limit * (data.page - 1),
       take: data.limit
