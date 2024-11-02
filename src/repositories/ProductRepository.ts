@@ -1,5 +1,12 @@
 import Product from '@/entities/Product';
+import { IProductOrderBy } from '@/types/Product';
 
+export interface IListProduct {
+  name: string;
+  orderBy: IProductOrderBy;
+  page: number;
+  limit: number;
+}
 export interface IListProductResponse {
   products: Product[];
 }
@@ -27,7 +34,7 @@ export interface IDeleteProductResponse {
 }
 
 export interface IProductRepository {
-  list: () => Promise<IListProductResponse>;
+  list: (data: IListProduct) => Promise<IListProductResponse>;
   findById: (data: IFindProductById) => Promise<IFindProductByIdResponse>;
   create: (data: ICreateProduct) => Promise<void>;
   update: (data: IUpdateProduct) => Promise<void>;

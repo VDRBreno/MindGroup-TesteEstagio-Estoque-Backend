@@ -1,12 +1,23 @@
 import prisma from '@/prisma';
 
-import { ICreateProduct, IDeleteProduct, IDeleteProductResponse, IFindProductById, IFindProductByIdResponse, IListProductResponse, IProductRepository, IUpdateProduct } from '../ProductRepository';
+import { ICreateProduct, IDeleteProduct, IDeleteProductResponse, IFindProductById, IFindProductByIdResponse, IListProduct, IListProductResponse, IProductRepository, IUpdateProduct } from '../ProductRepository';
 
 export default class PrismaProductRepository implements IProductRepository {
 
-  async list(): Promise<IListProductResponse> {
-
-    const products = await prisma.product.findMany();
+  async list(data: IListProduct): Promise<IListProductResponse> {
+    
+    const products = await prisma.product.findMany({
+      where: {
+        name: {
+          contains: data.name
+        }
+      },
+      orderBy: {
+        [data.orderBy]: 'desc'
+      },
+      skip: data.limit * (data.page - 1),
+      take: data.limit
+    });
 
     return {
       products

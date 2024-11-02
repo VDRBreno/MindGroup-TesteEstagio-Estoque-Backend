@@ -7,9 +7,14 @@ export default class ListProductUseCase {
     private productRepository: IProductRepository
   ) {}
 
-  async execute(_: IListProductRequestDTO) {
+  async execute(data: IListProductRequestDTO) {
 
-    const { products } = await this.productRepository.list();
+    const { products } = await this.productRepository.list({
+      name: data.name,
+      orderBy: data.orderBy,
+      page: +data.page,
+      limit: +data.limit
+    });
 
     return {
       products
