@@ -21,6 +21,6 @@ routes.post('/user/session/valid', ValidUserSessionController.handler);
 routes.get('/product/list', validUserSessionMiddleware, ListProductController.handler);
 routes.post('/product/create', validUserSessionMiddleware, CreateProductController.handler);
 routes.patch('/product/update', validUserSessionMiddleware, UpdateProductController.handler);
-routes.delete('/product/delete', validUserSessionMiddleware, DeleteProductController.handler);
+routes.delete('/product/delete/:product_id', validUserSessionMiddleware, DeleteProductController.handler);
 
 export default routes;

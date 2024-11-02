@@ -10,7 +10,7 @@ const DeleteProductController: Route = {
     try {
 
       const dto = new DeleteProductRequestDTO();
-      if(!dto.validate(req.body) || !dto.value)
+      if(!dto.validate(req.params) || !dto.value)
         throw new FormattedExpressError({
           error: 'Unable to DeleteProductController, data is invalid',
           error_code: 'INVALID_DATA',
