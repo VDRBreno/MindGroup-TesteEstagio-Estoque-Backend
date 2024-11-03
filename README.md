@@ -31,6 +31,7 @@ docker compose up -d
 ## Tecnologias usadas
 
 - Docker
+- MySQL
 - TypeScript
 - Node
 - Express
