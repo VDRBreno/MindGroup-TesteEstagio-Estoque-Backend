@@ -26,7 +26,7 @@ export default class UpdateProductUseCase {
       description: data.description,
       image_name: data.image_base64 ?'' :product.image_name,
       value: data.value,
-      quantity: 0
+      quantity: product.quantity
     }, {
       id: product.id,
       created_at: product.created_at
